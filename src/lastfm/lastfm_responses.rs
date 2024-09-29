@@ -10,6 +10,7 @@ pub struct LastFMGetTokenResponse {
     pub token: String,
 }
 
+#[derive(Deserialize, Debug)]
 pub struct LastFMSessionResponse {
     pub session: LastFMSession,
 }

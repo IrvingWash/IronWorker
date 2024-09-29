@@ -1,7 +1,17 @@
+use std::io;
+
 use ironworker::lastfm::LastFM;
 
 fn main() -> Result<(), String> {
-    let lastfm = LastFM::new();
+    let mut lastfm = LastFM::new();
 
-    lastfm.sign_in()
+    let auth_url = lastfm.request_auth()?;
+    println!("{}", auth_url);
+
+    let mut ur = String::from("");
+    io::stdin().read_line(&mut ur).unwrap();
+
+    lastfm.get_session()?;
+
+    Ok(())
 }

@@ -1,3 +1,6 @@
+use serde::Deserialize;
+
+#[derive(Deserialize, Debug)]
 pub struct LastFMSession {
     key: String,
     name: String,

@@ -1,31 +1,47 @@
 use std::rc::Rc;
 
-use super::{fetch, lastfm_responses::LastFMGetTokenResponse, RequestsEnvironment};
+use super::{
+    fetch,
+    lastfm_objects::LastFMSession,
+    lastfm_responses::{LastFMGetTokenResponse, LastFMSessionResponse},
+    RequestsEnvironment,
+};
 
-pub struct AuthProvider {
-    requests_environment: Rc<RequestsEnvironment>,
+pub struct AuthProvider<'a> {
+    requests_environment: Rc<RequestsEnvironment<'a>>,
+    token: Option<String>,
 }
 
-impl AuthProvider {
-    pub fn new(requests_environment: Rc<RequestsEnvironment>) -> Self {
+impl<'a> AuthProvider<'a> {
+    pub fn new(requests_environment: Rc<RequestsEnvironment<'a>>) -> Self {
         Self {
             requests_environment,
+            token: None,
         }
     }
 
-    pub fn sign_in(&self) -> Result<(), String> {
-        let token = self.get_token()?;
-
-        dbg!(token);
-
-        Ok(())
-    }
-
-    fn get_token(&self) -> Result<LastFMGetTokenResponse, String> {
+    pub fn get_token(&mut self) -> Result<String, String> {
         let meta_info = self.requests_environment.auth_get_token();
 
         let token = fetch::<LastFMGetTokenResponse>(meta_info)?;
 
-        Ok(token)
+        self.token = Some(token.token.clone());
+
+        Ok(token.token)
+    }
+
+    pub fn get_session(&self) -> Result<LastFMSession, String> {
+        match &self.token {
+            Some(token) => {
+                let session = fetch::<LastFMSessionResponse>(
+                    self.requests_environment.auth_get_session(token),
+                )?;
+
+                dbg!(&session);
+
+                Ok(session.session)
+            }
+            None => Err("went wrong".to_owned()),
+        }
     }
 }

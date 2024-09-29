@@ -16,8 +16,9 @@ where
         .send()
         .map_err(utils::error_to_string)?;
 
-    serde_json::from_str::<T>(&response.text().map_err(utils::error_to_string)?)
-        .map_err(utils::error_to_string)
+    let text = response.text().map_err(utils::error_to_string)?;
+
+    serde_json::from_str::<T>(&text).map_err(utils::error_to_string)
 }
 
 fn to_method(method: RequestMethod) -> reqwest::Method {
