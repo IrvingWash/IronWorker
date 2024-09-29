@@ -1,4 +1,5 @@
 ![Crates.io Version](https://img.shields.io/crates/v/ironworker)
+![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/IrvingWash/ironworker/rust.yml?branch=main&label=ci)
 
 ## ironworker
 
