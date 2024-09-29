@@ -53,6 +53,21 @@ impl<'a> RequestsEnvironment<'a> {
         }
     }
 
+    pub fn user_get_recent_tracks(&self, user: &str) -> RequestMetaInfo {
+        let mut url = Url::new(self.base_url).unwrap();
+
+        url.add_query_param("method", "user.getRecentTracks");
+        url.add_query_param("api_key", self.api_key);
+        url.add_query_param("user", user);
+
+        RequestsEnvironment::add_common_query_params(&mut url);
+
+        RequestMetaInfo {
+            url,
+            method: RequestMethod::Get,
+        }
+    }
+
     fn add_signature(&self, url: &mut Url) {
         url.add_query_param("api_sig", &self.call_singer.sign(url.query_params()));
     }

@@ -9,7 +9,18 @@ pub struct Args {
 
 #[derive(Subcommand, Debug)]
 pub enum Commands {
-    Authenticate,
+    /// authenticate to lastfm
+    Auth,
+    /// list recent tracks
+    List,
+    /// scrobble an album
+    Scrobble { artist: String, album: String },
+}
+
+impl Default for Args {
+    fn default() -> Self {
+        Self::new()
+    }
 }
 
 impl Args {

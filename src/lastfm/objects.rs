@@ -6,67 +6,62 @@ pub struct LastFMSession {
     pub name: String,
 }
 
+#[derive(Deserialize, Debug)]
 pub struct LastFMRecentTracks {
-    // TODO: track
-    tracks: Vec<LastFMRecentTrack>,
+    #[serde(rename(deserialize = "track"))]
+    pub tracks: Vec<LastFMRecentTrack>,
 }
 
+#[derive(Deserialize, Debug)]
 pub struct LastFMRecentTrack {
-    album: LastFMRecentTrackAlbum,
-    artist: LastFMRecentTrackArtist,
-    date: LastFMRecentTrackDate,
-    // TODO: image
-    images: Vec<LastFMImage>,
-    mbid: String,
-    name: String,
-    url: String,
-    loved: LastFMBoolean,
+    pub album: LastFMRecentTrackAlbum,
+    pub artist: LastFMRecentTrackArtist,
+    pub date: LastFMRecentTrackDate,
+    #[serde(rename(deserialize = "image"))]
+    pub images: Vec<LastFMImage>,
+    pub name: String,
+    pub url: String,
 }
 
+#[derive(Deserialize, Debug)]
 pub struct LastFMRecentTrackAlbum {
-    // TODO: #text
-    text: String,
-    mbid: String,
+    #[serde(rename(deserialize = "#text"))]
+    pub text: String,
 }
 
+#[derive(Deserialize, Debug)]
 pub struct LastFMRecentTrackArtist {
-    name: String,
-    mbid: String,
+    pub name: Option<String>,
 }
 
+#[derive(Deserialize, Debug)]
 pub struct LastFMRecentTrackDate {
-    // TODO: #text
-    text: String,
-    // TODO: uts
-    utc: String,
+    #[serde(rename(deserialize = "uts"))]
+    pub utc: String,
 }
 
+#[derive(Deserialize, Debug)]
 pub struct LastFMImage {
-    // TODO: #text
-    text: String,
-    size: LastFMImageSize,
+    #[serde(rename(deserialize = "#text"))]
+    pub text: String,
+    pub size: LastFMImageSize,
 }
 
+#[derive(Deserialize, Debug, PartialEq)]
 pub enum LastFMImageSize {
+    #[serde(rename(deserialize = "small"))]
     Small,
+    #[serde(rename(deserialize = "medium"))]
     Medium,
+    #[serde(rename(deserialize = "large"))]
     Large,
+    #[serde(rename(deserialize = "extralarge"))]
     ExtraLarge,
+    #[serde(rename(deserialize = "mega"))]
     Mega,
 }
 
-impl LastFMImageSize {
-    pub fn value(&self) -> &str {
-        match self {
-            Self::Small => "small",
-            Self::Medium => "medium",
-            Self::Large => "large",
-            Self::ExtraLarge => "extralarge",
-            Self::Mega => "mega",
-        }
-    }
-}
-
+#[derive(Deserialize, Debug)]
 pub enum LastFMBoolean {
     True,
     False,

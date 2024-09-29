@@ -20,9 +20,23 @@ impl<'a> Cli<'a> {
     }
 
     pub fn start(&mut self) -> Result<(), String> {
-        match self.args.command {
-            Commands::Authenticate => self.authenticate(),
+        match &self.args.command {
+            Commands::Auth => self.authenticate(),
+            Commands::List => self.list(),
+            Commands::Scrobble { artist, album } => Ok(()),
         }
+    }
+
+    fn list(&mut self) -> Result<(), String> {
+        let recent_tracks = self.lastfm.recent_tracks(&self.storage.load()?.username)?;
+
+        for track in recent_tracks {
+            println!("=== track ===");
+            println!("{:#?}", track);
+            println!("=============");
+        }
+
+        Ok(())
     }
 
     fn authenticate(&mut self) -> Result<(), String> {
@@ -37,7 +51,7 @@ impl<'a> Cli<'a> {
             .read_line(&mut response)
             .map_err(|e| utils::error_to_string(e, "Awaiting input"))?;
 
-        let session = self.lastfm.get_session()?;
+        let session = self.lastfm.session()?;
 
         self.storage.save(StorageContent {
             session_key: session.key,

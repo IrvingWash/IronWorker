@@ -2,8 +2,8 @@ use std::rc::Rc;
 
 use super::{
     fetch,
-    lastfm_objects::LastFMSession,
-    lastfm_responses::{LastFMGetTokenResponse, LastFMSessionResponse},
+    objects::LastFMSession,
+    responses::{LastFMGetTokenResponse, LastFMSessionResponse},
     RequestsEnvironment,
 };
 

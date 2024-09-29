@@ -1,4 +1,4 @@
-use super::lastfm_objects::LastFMBoolean;
+use super::objects::LastFMBoolean;
 
 pub struct LastFMScrobbleTrackPayload {
     artist: String,

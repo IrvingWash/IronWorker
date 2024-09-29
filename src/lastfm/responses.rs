@@ -1,6 +1,6 @@
 use serde::Deserialize;
 
-use super::lastfm_objects::{
+use super::objects::{
     LastFMAlbumInfoResponseAlbum, LastFMRecentTracks, LastFMScrobbleTrackResponseAttr,
     LastFMSession,
 };
@@ -15,8 +15,9 @@ pub struct LastFMSessionResponse {
     pub session: LastFMSession,
 }
 
+#[derive(Deserialize, Debug)]
 pub struct LastFMRecentTracksResponse {
-    // TODO: recenttracks
+    #[serde(rename(deserialize = "recenttracks"))]
     pub recent_tracks: LastFMRecentTracks,
 }
 

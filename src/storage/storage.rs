@@ -23,14 +23,21 @@ impl Storage {
         if cfg!(debug_assertions) {
             path = PathBuf::from("./storage.json");
 
-            fs::write(&path, "").map_err(|e| utils::error_to_string(e, ERROR_PREDICATE))?;
+            if !fs::exists(&path).map_err(|e| utils::error_to_string(e, ERROR_PREDICATE))? {
+                fs::write(&path, "").map_err(|e| utils::error_to_string(e, ERROR_PREDICATE))?;
+            }
         } else {
             let config_dir = dirs::config_dir();
 
             match config_dir {
                 None => return Err(String::from("Failed to create config file")),
                 Some(mut config_dir) => {
-                    config_dir.push("./blacksmith/storage.json");
+                    config_dir.push("blacksmith");
+
+                    fs::create_dir_all(&config_dir)
+                        .map_err(|e| utils::error_to_string(e, ERROR_PREDICATE))?;
+
+                    config_dir.push("storage.json");
 
                     if !fs::exists(&config_dir)
                         .map_err(|e| utils::error_to_string(e, ERROR_PREDICATE))?
