@@ -10,6 +10,12 @@ pub struct LastFM<'a> {
     auth_provider: AuthProvider<'a>,
 }
 
+impl<'a> Default for LastFM<'a> {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl<'a> LastFM<'a> {
     pub fn new() -> Self {
         let requests_environment = Rc::new(RequestsEnvironment::new(

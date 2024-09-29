@@ -1,12 +1,12 @@
 use std::collections::HashMap;
 
-pub struct URL {
+pub struct Url {
     origin: String,
     path: String,
     query_params: HashMap<String, String>,
 }
 
-impl URL {
+impl Url {
     pub fn new(url: &str) -> Result<Self, String> {
         let parts: Vec<&str> = url.split('.').collect();
 
@@ -20,18 +20,18 @@ impl URL {
             return Ok(Self {
                 origin: url.to_owned(),
                 path: String::from(""),
-                query_params: URL::extract_query_params(url)?,
+                query_params: Url::extract_query_params(url)?,
             });
         };
 
         Ok(Self {
             origin: format!("{}.{}", parts[0], top_level_and_path[0]),
             path: top_level_and_path[1].to_owned(),
-            query_params: URL::extract_query_params(url)?,
+            query_params: Url::extract_query_params(url)?,
         })
     }
 
-    pub fn from_url(path: &str, url: &URL) -> Result<Self, String> {
+    pub fn from_url(path: &str, url: &Url) -> Result<Self, String> {
         let path = if path.starts_with('/') {
             &path[1..path.len()]
         } else {
@@ -47,7 +47,7 @@ impl URL {
         Ok(Self {
             origin: url.origin().to_owned(),
             path: path.to_owned(),
-            query_params: URL::extract_query_params(&path)?,
+            query_params: Url::extract_query_params(path)?,
         })
     }
 
@@ -68,7 +68,7 @@ impl URL {
 
         let mut path = format!("{}/{}", self.origin, self.path);
 
-        if query_params.len() > 0 {
+        if !query_params.is_empty() {
             path = format!("{}?{}", path, query_params.join("&"));
         };
 
@@ -114,18 +114,18 @@ impl URL {
 
 #[cfg(test)]
 mod url_tests {
-    use super::URL;
+    use super::Url;
 
     #[test]
     fn test_new() -> Result<(), String> {
-        let url = URL::new("https://bandcampcom/orgoneus/");
+        let url = Url::new("https://bandcampcom/orgoneus/");
 
         assert_eq!(
             url.err(),
             Some("Wrong URL: https://bandcampcom/orgoneus/".to_owned())
         );
 
-        let url = URL::new("https://bandcamp.com/orgoneus/")?;
+        let url = Url::new("https://bandcamp.com/orgoneus/")?;
 
         assert_eq!(url.origin(), "https://bandcamp.com");
         assert_eq!(url.path(), "orgoneus");
@@ -135,9 +135,9 @@ mod url_tests {
 
     #[test]
     fn test_from_url() -> Result<(), String> {
-        let url = URL::new("https://bandcamp.com/orgoneus")?;
+        let url = Url::new("https://bandcamp.com/orgoneus")?;
 
-        let url = URL::from_url("/miracleworkerus/", &url)?;
+        let url = Url::from_url("/miracleworkerus/", &url)?;
 
         assert_eq!(url.origin(), "https://bandcamp.com");
         assert_eq!(url.path(), "miracleworkerus");
@@ -147,7 +147,7 @@ mod url_tests {
 
     #[test]
     fn test_href() -> Result<(), String> {
-        let url = URL::new("https://bandcamp.com/krallice/")?;
+        let url = Url::new("https://bandcamp.com/krallice/")?;
 
         assert_eq!(url.href(), "https://bandcamp.com/krallice");
 
@@ -156,15 +156,15 @@ mod url_tests {
 
     #[test]
     fn test_query_params() -> Result<(), String> {
-        let url = URL::new("https://bandcamp.com/gorguts?download");
+        let url = Url::new("https://bandcamp.com/gorguts?download");
 
         assert!(url.is_err());
 
-        let url = URL::new("https://bandcamp.com/gorguts?download=true")?;
+        let url = Url::new("https://bandcamp.com/gorguts?download=true")?;
 
         assert_eq!(url.query_params().len(), 1);
 
-        let url = URL::from_url("miracleworkerus?albums=5&from=2012", &url)?;
+        let url = Url::from_url("miracleworkerus?albums=5&from=2012", &url)?;
 
         assert_eq!(url.query_params().len(), 2);
 
