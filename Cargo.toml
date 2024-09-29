@@ -2,6 +2,14 @@
 name = "blacksmith"
 version = "0.1.0"
 edition = "2021"
+publish = true
+description = "lastfm scrobbler"
+homepage = "https://github.com/IrvingWash/blacksmith-rs"
+repository = "https://github.com/IrvingWash/blacksmith-rs.git"
+readme = "README.md"
+documentation = "https://github.com/IrvingWash/blacksmith-rs"
+license = "MIT"
+authors = ["WI"]
 
 [dependencies]
 clap = { version = "4.5.18", features = ["derive"] }
