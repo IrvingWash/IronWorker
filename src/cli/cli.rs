@@ -1,7 +1,9 @@
 use std::io;
 
 use crate::{
-    domain::objects::RecentTrack, storage::storage::StorageContent, utils, LastFM, Storage,
+    domain::objects::{AlbumInfo, RecentTrack},
+    storage::storage::StorageContent,
+    utils, LastFM, Storage,
 };
 
 use super::{args::Commands, Args};
@@ -26,6 +28,7 @@ impl<'a> Cli<'a> {
             Commands::Auth => self.authenticate(),
             Commands::List => self.list(),
             Commands::Scrobble { artist, album } => Ok(()),
+            Commands::Album { artist, album } => self.album_info(artist, album),
         }
     }
 
@@ -61,6 +64,14 @@ impl<'a> Cli<'a> {
         Ok(())
     }
 
+    fn album_info(&self, artist: &str, album: &str) -> Result<(), String> {
+        let album_info = self.lastfm.album_info(artist, album)?;
+
+        Cli::print_album_info(&album_info);
+
+        Ok(())
+    }
+
     fn print_track(track: &RecentTrack) {
         println!("===== track =====");
         println!("artist: {}", track.artist_name);
@@ -69,5 +80,17 @@ impl<'a> Cli<'a> {
         println!("date: {}", track.date);
         println!("=================");
         println!("\n");
+    }
+
+    fn print_album_info(album_info: &AlbumInfo) {
+        println!("===== album info =====");
+        println!("artist: {}", album_info.artist_name);
+        println!("title: {}", album_info.title);
+        println!("=== tracks ===");
+        for track in &album_info.tracks {
+            println!("{}. {}", track.track_number, track.title);
+        }
+        println!("==============");
+        println!("======================");
     }
 }

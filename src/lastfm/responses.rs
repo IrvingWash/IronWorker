@@ -26,6 +26,7 @@ pub struct LastFMScrobbleTrackResponse {
     pub attr: LastFMScrobbleTrackResponseAttr,
 }
 
+#[derive(Deserialize, Debug)]
 pub struct LastFMAlbumInfoResponse {
     pub album: LastFMAlbumInfoResponseAlbum,
 }

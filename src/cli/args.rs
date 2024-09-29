@@ -15,6 +15,8 @@ pub enum Commands {
     List,
     /// scrobble an album
     Scrobble { artist: String, album: String },
+    /// get album info
+    Album { artist: String, album: String },
 }
 
 impl Default for Args {

@@ -1,10 +1,11 @@
 use std::rc::Rc;
 
-use crate::domain::objects::RecentTrack;
+use crate::domain::objects::{AlbumInfo, RecentTrack};
 
 use super::{
-    converters::convert_lastfm_recent_tracks, objects::LastFMSession, AuthProvider, CallSigner,
-    RequestsEnvironment, Transport,
+    converters::{convert_last_fm_album_info, convert_lastfm_recent_tracks},
+    objects::LastFMSession,
+    AuthProvider, CallSigner, RequestsEnvironment, Transport,
 };
 
 const API_KEY: &str = "8c60466b983cecc92ea98f5113a8a500";
@@ -58,5 +59,11 @@ impl<'a> LastFM<'a> {
             .drain(..)
             .map(convert_lastfm_recent_tracks)
             .collect())
+    }
+
+    pub fn album_info(&self, artist: &str, album: &str) -> Result<AlbumInfo, String> {
+        let album_info = self.transport.album_get_info(artist, album)?;
+
+        Ok(convert_last_fm_album_info(album_info.album))
     }
 }

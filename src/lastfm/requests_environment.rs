@@ -57,8 +57,24 @@ impl<'a> RequestsEnvironment<'a> {
         let mut url = Url::new(self.base_url).unwrap();
 
         url.add_query_param("method", "user.getRecentTracks");
-        url.add_query_param("api_key", self.api_key);
         url.add_query_param("user", user);
+        url.add_query_param("api_key", self.api_key);
+
+        RequestsEnvironment::add_common_query_params(&mut url);
+
+        RequestMetaInfo {
+            url,
+            method: RequestMethod::Get,
+        }
+    }
+
+    pub fn album_get_info(&self, artist: &str, album: &str) -> RequestMetaInfo {
+        let mut url = Url::new(&self.base_url).unwrap();
+
+        url.add_query_param("method", "album.getInfo");
+        url.add_query_param("artist", artist);
+        url.add_query_param("album", album);
+        url.add_query_param("api_key", self.api_key);
 
         RequestsEnvironment::add_common_query_params(&mut url);
 

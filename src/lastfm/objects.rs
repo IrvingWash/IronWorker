@@ -62,6 +62,8 @@ pub enum LastFMImageSize {
     ExtraLarge,
     #[serde(rename(deserialize = "mega"))]
     Mega,
+    #[serde(rename(deserialize = ""))]
+    Missing,
 }
 
 #[derive(Deserialize, Debug)]
@@ -91,33 +93,37 @@ pub struct LastFMScrobbleTrackResponseAttr {
     ignored: LastFMBoolean,
 }
 
+#[derive(Deserialize, Debug)]
 pub struct LastFMAlbumInfoResponseAlbum {
-    artist: String,
-    listeners: String,
-    mbid: String,
-    // TODO: image
-    images: Vec<LastFMImage>,
-    name: String,
-    // TODO: playcount
-    play_count: String,
-    track: LastFMAlbumInfoResponseAlbumTracks,
-    url: String,
+    pub artist: String,
+    #[serde(rename(deserialize = "image"))]
+    pub images: Vec<LastFMImage>,
+    pub name: String,
+    pub tracks: LastFMAlbumInfoResponseAlbumTracks,
+    pub url: String,
 }
 
+#[derive(Deserialize, Debug)]
 pub struct LastFMAlbumInfoResponseAlbumTracks {
-    // TODO: track
-    tracks: LastFMAlbumInfoResponseAlbumTracksTrack,
+    #[serde(rename(deserialize = "track"))]
+    pub tracks: Vec<LastFMAlbumInfoResponseAlbumTracksTrack>,
 }
 
+#[derive(Deserialize, Debug)]
 pub struct LastFMAlbumInfoResponseAlbumTracksTrack {
-    artist: LastFMAlbumInfoResponseAlbumTracksTrackArtist,
-    duration: i64,
-    name: String,
-    url: String,
+    #[serde(rename(deserialize = "@attr"))]
+    pub attribute: LastFMAlbumInfoResponseAlbumTracksTrackAttribute,
+    pub artist: LastFMAlbumInfoResponseAlbumTracksTrackArtist,
+    pub name: String,
+    pub url: String,
 }
 
+#[derive(Deserialize, Debug)]
+pub struct LastFMAlbumInfoResponseAlbumTracksTrackAttribute {
+    pub rank: u64,
+}
+
+#[derive(Deserialize, Debug)]
 pub struct LastFMAlbumInfoResponseAlbumTracksTrackArtist {
-    mbid: String,
-    name: String,
-    url: String,
+    pub name: String,
 }
