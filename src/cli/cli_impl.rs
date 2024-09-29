@@ -35,22 +35,36 @@ impl<'a> Cli<'a> {
                 artist,
                 album,
                 track,
-            } => self.scrobble_track(artist, album, track),
-            Commands::ScrobbleAlbum { .. } => Ok(()),
+            } => self.scrobble_track(artist, album, track, None),
+            Commands::ScrobbleAlbum { artist, album } => self.scrobble_album(artist, album),
         }
     }
 
-    fn scrobble_track(&self, artist: &str, album: &str, track: &str) -> Result<(), String> {
-        self.lastfm.scrobble_track(ScrobbleTrackPayload {
+    fn scrobble_track(
+        &self,
+        artist: &str,
+        album: &str,
+        track: &str,
+        track_number: Option<u64>,
+    ) -> Result<(), String> {
+        let result = self.lastfm.scrobble_track(ScrobbleTrackPayload {
             album_title: Some(album.to_owned()),
             artist_name: artist.to_owned(),
             track_title: track.to_owned(),
             timestamp: SystemTime::now()
                 .duration_since(UNIX_EPOCH)
                 .map_err(|e| utils::error_to_string(e, "Getting UTC timestamp"))?
-                .as_secs(),
+                .as_secs()
+                + track_number.unwrap_or(0),
             track_number: None,
         })?;
+
+        if !result.accepted {
+            return Err(format!(
+                "Failed to scrobble track: {} - {} - {}",
+                artist, album, track
+            ));
+        }
 
         Ok(())
     }
@@ -60,6 +74,21 @@ impl<'a> Cli<'a> {
 
         for track in recent_tracks.iter().rev() {
             Cli::print_track(track);
+        }
+
+        Ok(())
+    }
+
+    fn scrobble_album(&self, artist: &str, album: &str) -> Result<(), String> {
+        let album_info = self.lastfm.album_info(artist, album)?;
+
+        for track in album_info.tracks {
+            self.scrobble_track(
+                &track.artist_name,
+                &album_info.title,
+                &track.title,
+                Some(track.track_number),
+            )?;
         }
 
         Ok(())
