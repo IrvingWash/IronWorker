@@ -1,9 +1,10 @@
 [package]
-name = "ironworker"
+name = "blacksmith"
 version = "0.1.0"
 edition = "2021"
 
 [dependencies]
+dirs = "5.0.1"
 md5 = "0.7.0"
 reqwest = { version = "0.12.7", features = ["blocking"] }
 serde = { version = "1.0.202", features = ["derive"] }

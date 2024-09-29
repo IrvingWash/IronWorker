@@ -4,6 +4,8 @@ use crate::utils::{self, RequestMethod};
 
 use super::requests_environment::RequestMetaInfo;
 
+const ERROR_PREDICATE: &str = "LastFM fetch";
+
 pub fn fetch<T>(request_meta_info: RequestMetaInfo) -> Result<T, String>
 where
     T: for<'a> Deserialize<'a>,
@@ -14,11 +16,13 @@ where
             request_meta_info.url.href(),
         )
         .send()
-        .map_err(utils::error_to_string)?;
+        .map_err(|e| utils::error_to_string(e, ERROR_PREDICATE))?;
 
-    let text = response.text().map_err(utils::error_to_string)?;
+    let text = response
+        .text()
+        .map_err(|e| utils::error_to_string(e, ERROR_PREDICATE))?;
 
-    serde_json::from_str::<T>(&text).map_err(utils::error_to_string)
+    serde_json::from_str::<T>(&text).map_err(|e| utils::error_to_string(e, ERROR_PREDICATE))
 }
 
 fn to_method(method: RequestMethod) -> reqwest::Method {

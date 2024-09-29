@@ -1,8 +1,9 @@
 use std::io;
 
-use ironworker::lastfm::LastFM;
+use blacksmith::{lastfm::LastFM, storage::Storage};
 
 fn main() -> Result<(), String> {
+    Storage::new();
     let mut lastfm = LastFM::new();
 
     let auth_url = lastfm.request_auth()?;
