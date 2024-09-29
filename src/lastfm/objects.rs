@@ -39,6 +39,8 @@ pub struct LastFMRecentTrackArtist {
 pub struct LastFMRecentTrackDate {
     #[serde(rename(deserialize = "uts"))]
     pub utc: String,
+    #[serde(rename(deserialize = "#text"))]
+    pub text: String,
 }
 
 #[derive(Deserialize, Debug)]

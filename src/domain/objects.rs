@@ -4,6 +4,6 @@ pub struct RecentTrack {
     pub title: String,
     pub last_fm_url: String,
     pub album_title: String,
-    pub timestamp: String,
+    pub date: String,
     pub last_fm_image_url: Option<String>,
 }

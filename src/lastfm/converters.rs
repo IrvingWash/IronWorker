@@ -8,8 +8,8 @@ pub fn convert_lastfm_recent_tracks(lastfm_recent_track: LastFMRecentTrack) -> R
         artist_name: lastfm_recent_track.artist.name,
         last_fm_image_url: find_large_image_url(lastfm_recent_track.images),
         last_fm_url: lastfm_recent_track.url,
-        timestamp: lastfm_recent_track.date.utc,
         title: lastfm_recent_track.name,
+        date: lastfm_recent_track.date.text,
     }
 }
 

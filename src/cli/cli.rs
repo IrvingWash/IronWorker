@@ -1,6 +1,8 @@
 use std::io;
 
-use crate::{storage::storage::StorageContent, utils, LastFM, Storage};
+use crate::{
+    domain::objects::RecentTrack, storage::storage::StorageContent, utils, LastFM, Storage,
+};
 
 use super::{args::Commands, Args};
 
@@ -30,10 +32,8 @@ impl<'a> Cli<'a> {
     fn list(&mut self) -> Result<(), String> {
         let recent_tracks = self.lastfm.recent_tracks(&self.storage.load()?.username)?;
 
-        for track in recent_tracks {
-            println!("=== track ===");
-            println!("{:#?}", track);
-            println!("=============");
+        for track in recent_tracks.iter().rev() {
+            Cli::print_track(track);
         }
 
         Ok(())
@@ -59,5 +59,15 @@ impl<'a> Cli<'a> {
         })?;
 
         Ok(())
+    }
+
+    fn print_track(track: &RecentTrack) {
+        println!("===== track =====");
+        println!("artist: {}", track.artist_name);
+        println!("album: {}", track.album_title);
+        println!("track: {}", track.title);
+        println!("date: {}", track.date);
+        println!("=================");
+        println!("\n");
     }
 }
