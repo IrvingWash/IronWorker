@@ -1,3 +1,4 @@
+use reqwest::header::CONTENT_LENGTH;
 use serde::Deserialize;
 
 use crate::utils::{self, RequestMethod};
@@ -16,7 +17,7 @@ where
     );
 
     let builder = if request_meta_info.method == RequestMethod::Post {
-        builder.header("Content-Length", 5)
+        builder.header(CONTENT_LENGTH, 0)
     } else {
         builder
     };
@@ -28,6 +29,8 @@ where
     let text = response
         .text()
         .map_err(|e| utils::error_to_string(e, ERROR_PREDICATE))?;
+
+    dbg!(&text);
 
     serde_json::from_str::<T>(&text).map_err(|e| utils::error_to_string(e, ERROR_PREDICATE))
 }

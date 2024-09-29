@@ -23,6 +23,11 @@ pub struct LastFMRecentTracksResponse {
 
 #[derive(Deserialize, Debug)]
 pub struct LastFMScrobbleTrackResponse {
+    pub scrobbles: LastFMScrobbleTrackResponseScrobbles,
+}
+
+#[derive(Deserialize, Debug)]
+pub struct LastFMScrobbleTrackResponseScrobbles {
     #[serde(rename(deserialize = "@attr"))]
     pub attribute: LastFMScrobbleTrackResponseAttribute,
 }

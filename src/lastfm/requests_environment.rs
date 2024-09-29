@@ -104,7 +104,7 @@ impl<'a> RequestsEnvironment<'a> {
 
         url.add_query_param("artist", &payload.artist);
         url.add_query_param("track", &payload.track);
-        url.add_query_param("timestamp", &1727622674.to_string());
+        url.add_query_param("timestamp", &payload.timestamp.to_string());
         if let Some(album) = payload.album {
             url.add_query_param("album", &album);
         }

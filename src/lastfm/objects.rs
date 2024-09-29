@@ -37,8 +37,6 @@ pub struct LastFMRecentTrackArtist {
 
 #[derive(Deserialize, Debug)]
 pub struct LastFMRecentTrackDate {
-    #[serde(rename(deserialize = "uts"))]
-    pub utc: String,
     #[serde(rename(deserialize = "#text"))]
     pub text: String,
 }
@@ -66,34 +64,9 @@ pub enum LastFMImageSize {
     Missing,
 }
 
-#[derive(Deserialize, Debug, PartialEq)]
-pub enum LastFMBoolean {
-    #[serde(rename(deserialize = "1"))]
-    True,
-    #[serde(rename(deserialize = "0"))]
-    False,
-}
-
-impl LastFMBoolean {
-    pub fn string_value(&self) -> &str {
-        match self {
-            Self::True => "1",
-            Self::False => "0",
-        }
-    }
-
-    pub fn number_value(&self) -> u8 {
-        match self {
-            Self::True => 1,
-            Self::False => 0,
-        }
-    }
-}
-
 #[derive(Deserialize, Debug)]
 pub struct LastFMScrobbleTrackResponseAttribute {
-    pub accepted: LastFMBoolean,
-    pub ignored: Option<String>,
+    pub accepted: u8,
 }
 
 #[derive(Deserialize, Debug)]

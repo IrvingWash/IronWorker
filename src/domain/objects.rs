@@ -37,5 +37,4 @@ pub struct ScrobbleTrackPayload {
 #[derive(Debug)]
 pub struct TrackScrobblingResult {
     pub accepted: bool,
-    pub ignored_message: Option<String>,
 }

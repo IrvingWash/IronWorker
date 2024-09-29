@@ -4,8 +4,8 @@ use crate::domain::objects::{
 
 use super::{
     objects::{
-        LastFMAlbumInfoResponseAlbum, LastFMAlbumInfoResponseAlbumTracksTrack, LastFMBoolean,
-        LastFMImage, LastFMImageSize, LastFMRecentTrack,
+        LastFMAlbumInfoResponseAlbum, LastFMAlbumInfoResponseAlbumTracksTrack, LastFMImage,
+        LastFMImageSize, LastFMRecentTrack,
     },
     payloads::LastFMScrobbleTrackPayload,
     responses::LastFMScrobbleTrackResponse,
@@ -15,8 +15,7 @@ pub fn convert_lastfm_scrobbling_result(
     lastfm_scrobbling_result: LastFMScrobbleTrackResponse,
 ) -> TrackScrobblingResult {
     TrackScrobblingResult {
-        accepted: lastfm_scrobbling_result.attribute.accepted == LastFMBoolean::True,
-        ignored_message: lastfm_scrobbling_result.attribute.ignored,
+        accepted: lastfm_scrobbling_result.scrobbles.attribute.accepted == 1,
     }
 }
 
