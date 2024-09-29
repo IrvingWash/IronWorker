@@ -1,13 +1,13 @@
 [package]
-name = "blacksmith"
+name = "ironworker"
 version = "0.1.0"
 edition = "2021"
 publish = true
 description = "lastfm scrobbler"
-homepage = "https://github.com/IrvingWash/blacksmith-rs"
-repository = "https://github.com/IrvingWash/blacksmith-rs.git"
+homepage = "https://github.com/IrvingWash/ironworker-rs"
+repository = "https://github.com/IrvingWash/ironworker-rs.git"
 readme = "README.md"
-documentation = "https://github.com/IrvingWash/blacksmith-rs"
+documentation = "https://github.com/IrvingWash/ironworker-rs"
 license = "MIT"
 authors = ["WI"]
 

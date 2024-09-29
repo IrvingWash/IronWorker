@@ -1,9 +1,9 @@
-use blacksmith::{
+use clap::Parser;
+use ironworker::{
     cli::{Args, Cli},
     storage::Storage,
     LastFM,
 };
-use clap::Parser;
 
 fn main() -> Result<(), String> {
     let args = Args::parse();

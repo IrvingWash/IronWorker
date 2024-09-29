@@ -32,7 +32,7 @@ impl Storage {
             match config_dir {
                 None => return Err(String::from("Failed to create config file")),
                 Some(mut config_dir) => {
-                    config_dir.push("blacksmith");
+                    config_dir.push("ironworker");
 
                     fs::create_dir_all(&config_dir)
                         .map_err(|e| utils::error_to_string(e, ERROR_PREDICATE))?;
