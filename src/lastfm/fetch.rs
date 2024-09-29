@@ -30,8 +30,6 @@ where
         .text()
         .map_err(|e| utils::error_to_string(e, ERROR_PREDICATE))?;
 
-    dbg!(&text);
-
     serde_json::from_str::<T>(&text).map_err(|e| utils::error_to_string(e, ERROR_PREDICATE))
 }
 
