@@ -1,3 +1,5 @@
+![Crates.io Version](https://img.shields.io/crates/v/ironworker)
+
 ## ironworker
 
 a simple cli tool to manually scrobble tracks and albums to lastfm
