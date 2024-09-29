@@ -31,7 +31,8 @@ pub struct LastFMRecentTrackAlbum {
 
 #[derive(Deserialize, Debug)]
 pub struct LastFMRecentTrackArtist {
-    pub name: Option<String>,
+    #[serde(rename(deserialize = "#text"))]
+    pub name: String,
 }
 
 #[derive(Deserialize, Debug)]
