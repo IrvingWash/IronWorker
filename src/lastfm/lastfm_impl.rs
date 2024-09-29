@@ -29,7 +29,7 @@ impl<'a> LastFM<'a> {
             BASE_URL,
             API_KEY,
             CallSigner::new(SHARED_SECRET),
-            &storage,
+            storage,
         ));
 
         Self {

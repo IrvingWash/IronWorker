@@ -1,4 +1,5 @@
 pub use args::Args;
-pub mod cli;
+pub use cli_impl::Cli;
 
 mod args;
+mod cli_impl;

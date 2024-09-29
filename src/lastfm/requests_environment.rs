@@ -81,7 +81,7 @@ impl<'a> RequestsEnvironment<'a> {
     }
 
     pub fn album_get_info(&self, artist: &str, album: &str) -> RequestMetaInfo {
-        let mut url = Url::new(&self.base_url).unwrap();
+        let mut url = Url::new(self.base_url).unwrap();
 
         url.add_query_param("method", "album.getInfo");
         url.add_query_param("artist", artist);
@@ -100,7 +100,7 @@ impl<'a> RequestsEnvironment<'a> {
         &self,
         payload: LastFMScrobbleTrackPayload,
     ) -> Result<RequestMetaInfo, String> {
-        let mut url = Url::new(&self.base_url).unwrap();
+        let mut url = Url::new(self.base_url).unwrap();
 
         url.add_query_param("artist", &payload.artist);
         url.add_query_param("track", &payload.track);

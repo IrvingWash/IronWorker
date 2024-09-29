@@ -31,6 +31,7 @@ impl Url {
         })
     }
 
+    #[allow(dead_code)]
     pub fn from_url(path: &str, url: &Url) -> Result<Self, String> {
         let path = if path.starts_with('/') {
             &path[1..path.len()]
@@ -55,6 +56,7 @@ impl Url {
         &self.origin
     }
 
+    #[allow(dead_code)]
     pub fn path(&self) -> &str {
         &self.path
     }

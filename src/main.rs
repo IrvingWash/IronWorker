@@ -1,5 +1,5 @@
 use blacksmith::{
-    cli::{cli::Cli, Args},
+    cli::{Args, Cli},
     storage::Storage,
     LastFM,
 };

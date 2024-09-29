@@ -5,7 +5,7 @@ use std::{
 
 use crate::{
     domain::objects::{AlbumInfo, RecentTrack, ScrobbleTrackPayload},
-    storage::storage::StorageContent,
+    storage::StorageContent,
     utils, LastFM, Storage,
 };
 
@@ -36,7 +36,7 @@ impl<'a> Cli<'a> {
                 album,
                 track,
             } => self.scrobble_track(artist, album, track),
-            Commands::ScrobbleAlbum { artist, album } => Ok(()),
+            Commands::ScrobbleAlbum { .. } => Ok(()),
         }
     }
 

@@ -1,4 +1,4 @@
-pub use lastfm::LastFM;
+pub use lastfm_impl::LastFM;
 pub mod converters;
 pub mod objects;
 pub mod payloads;
@@ -12,6 +12,6 @@ use transport::Transport;
 mod auth_provider;
 mod call_signer;
 mod fetch;
-mod lastfm;
+mod lastfm_impl;
 mod requests_environment;
 mod transport;

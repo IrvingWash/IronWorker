@@ -1,3 +1,3 @@
-pub use storage::Storage;
+pub use storage_impl::{Storage, StorageContent};
 
-pub mod storage;
+pub mod storage_impl;

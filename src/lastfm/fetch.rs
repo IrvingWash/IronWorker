@@ -38,9 +38,6 @@ where
 fn to_method(method: &RequestMethod) -> reqwest::Method {
     match method {
         RequestMethod::Get => reqwest::Method::GET,
-        RequestMethod::Delete => reqwest::Method::DELETE,
-        RequestMethod::Patch => reqwest::Method::PATCH,
         RequestMethod::Post => reqwest::Method::POST,
-        RequestMethod::Put => reqwest::Method::PUT,
     }
 }
