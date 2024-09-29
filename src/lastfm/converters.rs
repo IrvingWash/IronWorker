@@ -1,11 +1,38 @@
-use crate::domain::objects::{AlbumInfo, RecentTrack, Track};
-
-use super::objects::{
-    LastFMAlbumInfoResponseAlbum, LastFMAlbumInfoResponseAlbumTracksTrack, LastFMImage,
-    LastFMImageSize, LastFMRecentTrack,
+use crate::domain::objects::{
+    AlbumInfo, RecentTrack, ScrobbleTrackPayload, Track, TrackScrobblingResult,
 };
 
-pub fn convert_last_fm_album_info(last_fm_album_info: LastFMAlbumInfoResponseAlbum) -> AlbumInfo {
+use super::{
+    objects::{
+        LastFMAlbumInfoResponseAlbum, LastFMAlbumInfoResponseAlbumTracksTrack, LastFMBoolean,
+        LastFMImage, LastFMImageSize, LastFMRecentTrack,
+    },
+    payloads::LastFMScrobbleTrackPayload,
+    responses::LastFMScrobbleTrackResponse,
+};
+
+pub fn convert_lastfm_scrobbling_result(
+    lastfm_scrobbling_result: LastFMScrobbleTrackResponse,
+) -> TrackScrobblingResult {
+    TrackScrobblingResult {
+        accepted: lastfm_scrobbling_result.attribute.accepted == LastFMBoolean::True,
+        ignored_message: lastfm_scrobbling_result.attribute.ignored,
+    }
+}
+
+pub fn convert_scrobble_track_payload(
+    scrobble_track_payload: ScrobbleTrackPayload,
+) -> LastFMScrobbleTrackPayload {
+    LastFMScrobbleTrackPayload {
+        album: scrobble_track_payload.album_title,
+        artist: scrobble_track_payload.artist_name,
+        timestamp: scrobble_track_payload.timestamp,
+        track: scrobble_track_payload.track_title,
+        track_number: scrobble_track_payload.track_number,
+    }
+}
+
+pub fn convert_lastfm_album_info(last_fm_album_info: LastFMAlbumInfoResponseAlbum) -> AlbumInfo {
     AlbumInfo {
         artist_name: last_fm_album_info.artist,
         lastfm_image_url: find_large_image_url(last_fm_album_info.images),

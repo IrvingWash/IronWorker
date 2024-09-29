@@ -2,7 +2,8 @@ use std::rc::Rc;
 
 use super::{
     fetch,
-    responses::{LastFMAlbumInfoResponse, LastFMRecentTracksResponse},
+    payloads::LastFMScrobbleTrackPayload,
+    responses::{LastFMAlbumInfoResponse, LastFMRecentTracksResponse, LastFMScrobbleTrackResponse},
     RequestsEnvironment,
 };
 
@@ -27,5 +28,12 @@ impl<'a> Transport<'a> {
         album: &str,
     ) -> Result<LastFMAlbumInfoResponse, String> {
         fetch::<LastFMAlbumInfoResponse>(self.requests_environment.album_get_info(artist, album))
+    }
+
+    pub fn scrobble_track(
+        &self,
+        payload: LastFMScrobbleTrackPayload,
+    ) -> Result<LastFMScrobbleTrackResponse, String> {
+        fetch::<LastFMScrobbleTrackResponse>(self.requests_environment.track_scrobble(payload)?)
     }
 }

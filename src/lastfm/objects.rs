@@ -66,9 +66,11 @@ pub enum LastFMImageSize {
     Missing,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Deserialize, Debug, PartialEq)]
 pub enum LastFMBoolean {
+    #[serde(rename(deserialize = "1"))]
     True,
+    #[serde(rename(deserialize = "0"))]
     False,
 }
 
@@ -88,9 +90,10 @@ impl LastFMBoolean {
     }
 }
 
-pub struct LastFMScrobbleTrackResponseAttr {
-    accepted: LastFMBoolean,
-    ignored: LastFMBoolean,
+#[derive(Deserialize, Debug)]
+pub struct LastFMScrobbleTrackResponseAttribute {
+    pub accepted: LastFMBoolean,
+    pub ignored: Option<String>,
 }
 
 #[derive(Deserialize, Debug)]

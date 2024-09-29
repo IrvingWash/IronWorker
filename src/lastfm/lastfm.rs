@@ -1,9 +1,15 @@
 use std::rc::Rc;
 
-use crate::domain::objects::{AlbumInfo, RecentTrack};
+use crate::{
+    domain::objects::{AlbumInfo, RecentTrack, ScrobbleTrackPayload, TrackScrobblingResult},
+    Storage,
+};
 
 use super::{
-    converters::{convert_last_fm_album_info, convert_lastfm_recent_tracks},
+    converters::{
+        convert_lastfm_album_info, convert_lastfm_recent_tracks, convert_lastfm_scrobbling_result,
+        convert_scrobble_track_payload,
+    },
     objects::LastFMSession,
     AuthProvider, CallSigner, RequestsEnvironment, Transport,
 };
@@ -17,18 +23,13 @@ pub struct LastFM<'a> {
     transport: Transport<'a>,
 }
 
-impl<'a> Default for LastFM<'a> {
-    fn default() -> Self {
-        Self::new()
-    }
-}
-
 impl<'a> LastFM<'a> {
-    pub fn new() -> Self {
+    pub fn new(storage: &'a Storage) -> Self {
         let requests_environment = Rc::new(RequestsEnvironment::new(
             BASE_URL,
             API_KEY,
             CallSigner::new(SHARED_SECRET),
+            &storage,
         ));
 
         Self {
@@ -64,6 +65,17 @@ impl<'a> LastFM<'a> {
     pub fn album_info(&self, artist: &str, album: &str) -> Result<AlbumInfo, String> {
         let album_info = self.transport.album_get_info(artist, album)?;
 
-        Ok(convert_last_fm_album_info(album_info.album))
+        Ok(convert_lastfm_album_info(album_info.album))
+    }
+
+    pub fn scrobble_track(
+        &self,
+        payload: ScrobbleTrackPayload,
+    ) -> Result<TrackScrobblingResult, String> {
+        let result = self
+            .transport
+            .scrobble_track(convert_scrobble_track_payload(payload))?;
+
+        Ok(convert_lastfm_scrobbling_result(result))
     }
 }

@@ -24,3 +24,18 @@ pub struct AlbumInfo {
     pub tracks: Vec<Track>,
     pub lastfm_url: String,
 }
+
+#[derive(Debug)]
+pub struct ScrobbleTrackPayload {
+    pub track_title: String,
+    pub artist_name: String,
+    pub timestamp: u64,
+    pub track_number: Option<u64>,
+    pub album_title: Option<String>,
+}
+
+#[derive(Debug)]
+pub struct TrackScrobblingResult {
+    pub accepted: bool,
+    pub ignored_message: Option<String>,
+}

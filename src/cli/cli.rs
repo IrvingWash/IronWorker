@@ -1,7 +1,10 @@
-use std::io;
+use std::{
+    io,
+    time::{SystemTime, UNIX_EPOCH},
+};
 
 use crate::{
-    domain::objects::{AlbumInfo, RecentTrack},
+    domain::objects::{AlbumInfo, RecentTrack, ScrobbleTrackPayload},
     storage::storage::StorageContent,
     utils, LastFM, Storage,
 };
@@ -10,12 +13,12 @@ use super::{args::Commands, Args};
 
 pub struct Cli<'a> {
     lastfm: LastFM<'a>,
-    storage: Storage,
+    storage: &'a Storage,
     args: Args,
 }
 
 impl<'a> Cli<'a> {
-    pub fn new(lastfm: LastFM<'a>, storage: Storage, args: Args) -> Self {
+    pub fn new(lastfm: LastFM<'a>, storage: &'a Storage, args: Args) -> Self {
         Self {
             lastfm,
             storage,
@@ -27,9 +30,29 @@ impl<'a> Cli<'a> {
         match &self.args.command {
             Commands::Auth => self.authenticate(),
             Commands::List => self.list(),
-            Commands::Scrobble { artist, album } => Ok(()),
             Commands::Album { artist, album } => self.album_info(artist, album),
+            Commands::ScrobbleTrack {
+                artist,
+                album,
+                track,
+            } => self.scrobble_track(artist, album, track),
+            Commands::ScrobbleAlbum { artist, album } => Ok(()),
         }
+    }
+
+    fn scrobble_track(&self, artist: &str, album: &str, track: &str) -> Result<(), String> {
+        self.lastfm.scrobble_track(ScrobbleTrackPayload {
+            album_title: Some(album.to_owned()),
+            artist_name: artist.to_owned(),
+            track_title: track.to_owned(),
+            timestamp: SystemTime::now()
+                .duration_since(UNIX_EPOCH)
+                .map_err(|e| utils::error_to_string(e, "Getting UTC timestamp"))?
+                .as_secs(),
+            track_number: None,
+        })?;
+
+        Ok(())
     }
 
     fn list(&mut self) -> Result<(), String> {

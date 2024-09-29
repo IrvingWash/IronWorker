@@ -1,7 +1,7 @@
 use serde::Deserialize;
 
 use super::objects::{
-    LastFMAlbumInfoResponseAlbum, LastFMRecentTracks, LastFMScrobbleTrackResponseAttr,
+    LastFMAlbumInfoResponseAlbum, LastFMRecentTracks, LastFMScrobbleTrackResponseAttribute,
     LastFMSession,
 };
 
@@ -21,9 +21,10 @@ pub struct LastFMRecentTracksResponse {
     pub recent_tracks: LastFMRecentTracks,
 }
 
+#[derive(Deserialize, Debug)]
 pub struct LastFMScrobbleTrackResponse {
-    // TODO: @attr
-    pub attr: LastFMScrobbleTrackResponseAttr,
+    #[serde(rename(deserialize = "@attr"))]
+    pub attribute: LastFMScrobbleTrackResponseAttribute,
 }
 
 #[derive(Deserialize, Debug)]

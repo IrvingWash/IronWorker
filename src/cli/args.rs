@@ -13,8 +13,14 @@ pub enum Commands {
     Auth,
     /// list recent tracks
     List,
+    /// scrobble a track
+    ScrobbleTrack {
+        artist: String,
+        album: String,
+        track: String,
+    },
     /// scrobble an album
-    Scrobble { artist: String, album: String },
+    ScrobbleAlbum { artist: String, album: String },
     /// get album info
     Album { artist: String, album: String },
 }

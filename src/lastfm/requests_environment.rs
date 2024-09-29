@@ -1,11 +1,15 @@
-use crate::utils::{RequestMethod, Url};
+use crate::{
+    utils::{RequestMethod, Url},
+    Storage,
+};
 
-use super::CallSigner;
+use super::{payloads::LastFMScrobbleTrackPayload, CallSigner};
 
 pub struct RequestsEnvironment<'a> {
     base_url: &'a str,
     api_key: &'a str,
     call_singer: CallSigner<'a>,
+    storage: &'a Storage,
 }
 
 pub struct RequestMetaInfo {
@@ -14,11 +18,17 @@ pub struct RequestMetaInfo {
 }
 
 impl<'a> RequestsEnvironment<'a> {
-    pub fn new(base_url: &'a str, api_key: &'a str, call_singer: CallSigner<'a>) -> Self {
+    pub fn new(
+        base_url: &'a str,
+        api_key: &'a str,
+        call_singer: CallSigner<'a>,
+        storage: &'a Storage,
+    ) -> Self {
         Self {
             base_url,
             api_key,
             call_singer,
+            storage,
         }
     }
 
@@ -60,6 +70,8 @@ impl<'a> RequestsEnvironment<'a> {
         url.add_query_param("user", user);
         url.add_query_param("api_key", self.api_key);
 
+        self.add_signature(&mut url);
+
         RequestsEnvironment::add_common_query_params(&mut url);
 
         RequestMetaInfo {
@@ -82,6 +94,36 @@ impl<'a> RequestsEnvironment<'a> {
             url,
             method: RequestMethod::Get,
         }
+    }
+
+    pub fn track_scrobble(
+        &self,
+        payload: LastFMScrobbleTrackPayload,
+    ) -> Result<RequestMetaInfo, String> {
+        let mut url = Url::new(&self.base_url).unwrap();
+
+        url.add_query_param("artist", &payload.artist);
+        url.add_query_param("track", &payload.track);
+        url.add_query_param("timestamp", &1727622674.to_string());
+        if let Some(album) = payload.album {
+            url.add_query_param("album", &album);
+        }
+        if let Some(track_number) = payload.track_number {
+            url.add_query_param("trackNumber", &track_number.to_string());
+        }
+
+        url.add_query_param("method", "track.scrobble");
+        url.add_query_param("api_key", self.api_key);
+        url.add_query_param("sk", &self.storage.load()?.session_key);
+
+        self.add_signature(&mut url);
+
+        RequestsEnvironment::add_common_query_params(&mut url);
+
+        Ok(RequestMetaInfo {
+            url,
+            method: RequestMethod::Post,
+        })
     }
 
     fn add_signature(&self, url: &mut Url) {
