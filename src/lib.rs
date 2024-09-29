@@ -1,2 +1,2 @@
-mod lastfm;
+pub mod lastfm;
 mod utils;

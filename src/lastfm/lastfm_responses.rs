@@ -1,22 +1,29 @@
+use serde::Deserialize;
+
 use super::lastfm_objects::{
     LastFMAlbumInfoResponseAlbum, LastFMRecentTracks, LastFMScrobbleTrackResponseAttr,
     LastFMSession,
 };
 
+#[derive(Deserialize, Debug)]
+pub struct LastFMGetTokenResponse {
+    pub token: String,
+}
+
 pub struct LastFMSessionResponse {
-    session: LastFMSession,
+    pub session: LastFMSession,
 }
 
 pub struct LastFMRecentTracksResponse {
     // TODO: recenttracks
-    recent_tracks: LastFMRecentTracks,
+    pub recent_tracks: LastFMRecentTracks,
 }
 
 pub struct LastFMScrobbleTrackResponse {
     // TODO: @attr
-    attr: LastFMScrobbleTrackResponseAttr,
+    pub attr: LastFMScrobbleTrackResponseAttr,
 }
 
 pub struct LastFMAlbumInfoResponse {
-    album: LastFMAlbumInfoResponseAlbum,
+    pub album: LastFMAlbumInfoResponseAlbum,
 }

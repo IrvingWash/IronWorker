@@ -10,7 +10,7 @@ impl URL {
     pub fn new(url: &str) -> Result<Self, String> {
         let parts: Vec<&str> = url.split('.').collect();
 
-        if parts.len() != 2 {
+        if parts.len() < 2 {
             return Err(format!("Wrong URL: {}", url));
         };
 
@@ -77,6 +77,10 @@ impl URL {
 
     pub fn query_params(&self) -> &HashMap<String, String> {
         &self.query_params
+    }
+
+    pub fn add_query_param(&mut self, key: &str, value: &str) {
+        self.query_params.insert(key.to_owned(), value.to_owned());
     }
 
     fn extract_query_params(url: &str) -> Result<HashMap<String, String>, String> {
