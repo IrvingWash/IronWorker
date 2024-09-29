@@ -1,18 +1,18 @@
-use std::io;
-
-use blacksmith::{lastfm::LastFM, storage::Storage};
+use blacksmith::{
+    cli::{cli::Cli, Args},
+    storage::Storage,
+    LastFM,
+};
+use clap::Parser;
 
 fn main() -> Result<(), String> {
-    Storage::new();
-    let mut lastfm = LastFM::new();
+    let args = Args::parse();
+    let lastfm = LastFM::new();
+    let storage = Storage::new()?;
 
-    let auth_url = lastfm.request_auth()?;
-    println!("{}", auth_url);
+    let mut cli = Cli::new(lastfm, storage, args);
 
-    let mut ur = String::from("");
-    io::stdin().read_line(&mut ur).unwrap();
-
-    lastfm.get_session()?;
+    cli.start()?;
 
     Ok(())
 }

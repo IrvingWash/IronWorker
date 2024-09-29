@@ -37,8 +37,6 @@ impl<'a> AuthProvider<'a> {
                     self.requests_environment.auth_get_session(token),
                 )?;
 
-                dbg!(&session);
-
                 Ok(session.session)
             }
             None => Err("went wrong".to_owned()),

@@ -6,7 +6,11 @@ use crate::utils;
 
 const ERROR_PREDICATE: &str = "Config creation";
 
-pub trait StorageContent: Serialize + for<'a> Deserialize<'a> {}
+#[derive(Serialize, Deserialize, Debug)]
+pub struct StorageContent {
+    pub session_key: String,
+    pub username: String,
+}
 
 pub struct Storage {
     path: PathBuf,
@@ -43,7 +47,7 @@ impl Storage {
         Ok(Self { path })
     }
 
-    pub fn save<T: StorageContent>(&self, content: T) -> Result<(), String> {
+    pub fn save(&self, content: StorageContent) -> Result<(), String> {
         let json = serde_json::to_string(&content)
             .map_err(|e| utils::error_to_string(e, "Saving config"))?;
 
@@ -52,11 +56,11 @@ impl Storage {
         Ok(())
     }
 
-    pub fn load<T: StorageContent>(&self) -> Result<T, String> {
+    pub fn load(&self) -> Result<StorageContent, String> {
         let json = fs::read_to_string(&self.path)
             .map_err(|e| utils::error_to_string(e, "Loading config"))?;
 
-        let value = serde_json::from_str::<T>(&json)
+        let value = serde_json::from_str::<StorageContent>(&json)
             .map_err(|e| utils::error_to_string(e, "Loading config"))?;
 
         Ok(value)

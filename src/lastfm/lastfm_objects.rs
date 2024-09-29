@@ -2,8 +2,8 @@ use serde::Deserialize;
 
 #[derive(Deserialize, Debug)]
 pub struct LastFMSession {
-    key: String,
-    name: String,
+    pub key: String,
+    pub name: String,
 }
 
 pub struct LastFMRecentTracks {

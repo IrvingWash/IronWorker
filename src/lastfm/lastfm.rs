@@ -1,6 +1,6 @@
 use std::rc::Rc;
 
-use super::{AuthProvider, CallSigner, RequestsEnvironment};
+use super::{lastfm_objects::LastFMSession, AuthProvider, CallSigner, RequestsEnvironment};
 
 const API_KEY: &str = "8c60466b983cecc92ea98f5113a8a500";
 const SHARED_SECRET: &str = "9e044c244ebfb1bbfa4e9cc56c1a01d5";
@@ -38,11 +38,7 @@ impl<'a> LastFM<'a> {
         ))
     }
 
-    pub fn get_session(&mut self) -> Result<(), String> {
-        let session = self.auth_provider.get_session()?;
-
-        dbg!(session);
-
-        Ok(())
+    pub fn get_session(&mut self) -> Result<LastFMSession, String> {
+        self.auth_provider.get_session()
     }
 }
